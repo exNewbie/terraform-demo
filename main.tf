@@ -19,3 +19,7 @@ module "ctm" {
   lb_vpc_id   = "${var.app_vpc_id}"
   lb_sg_allow = ["${join("", list(trimspace(data.http.myip.body), "/32"))}"]
 }
+
+output "lb_dns_name" {
+  value = "http://${module.ctm.lb_dns_name}"
+}
