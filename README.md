@@ -1,5 +1,3 @@
-# CTM
-
 In this sample, a new stack including
 - 2 EC2 instaces with user data script
 - A launch configuration
@@ -17,11 +15,11 @@ In this sample, a new stack including
 
  - If your workstation is MacOS,
 ```
-    unzip terraform_0.11.13_darwin_amd64.zip
+    unzip terraform_0.12.15_darwin_amd64.zip
 ```
  - If your workstation is Linux,
  ```
-    unzip terraform_0.11.13_linux_amd64.zip
+    unzip terraform_0.12.15_linux_amd64.zip
 ```
 
 
