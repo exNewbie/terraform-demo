@@ -2,7 +2,7 @@ provider "aws" {
   region = "ap-southeast-2"
 }
 
-module "ctm" {
+module "demo" {
   source = "./modules"
 
   # Launch Config variables
@@ -21,6 +21,6 @@ module "ctm" {
 }
 
 output "lb_dns_name" {
-  value = "http://${module.ctm.lb_dns_name}"
+  value = "http://${module.demo.lb_dns_name}"
 }
 
