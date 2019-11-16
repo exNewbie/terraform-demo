@@ -1,4 +1,5 @@
 resource "aws_launch_configuration" "launch_configuration" {
+  ## Error: Cycle: module.demo.aws_launch_configuration.launch_configuration (destroy deposed 90e4c544), module.demo.aws_autoscaling_group.autoscaling_group
   name_prefix = "launch-conf-application-"
 
   image_id        = data.aws_ami.ami.id
@@ -15,9 +16,10 @@ resource "aws_launch_configuration" "launch_configuration" {
 resource "aws_autoscaling_group" "autoscaling_group" {
   depends_on = [
     aws_lb.auto_scaling,
-    aws_launch_configuration.launch_configuration,
+    aws_launch_configuration.launch_configuration
   ]
 
+  ## Change here to create new servers
   name = "asg-application"
 
   min_size         = var.asg_min_size
@@ -27,6 +29,8 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   availability_zones = data.aws_availability_zones.azs.names
 
   launch_configuration = aws_launch_configuration.launch_configuration.name
+
+  health_check_grace_period = 0
 
   force_delete = false
 
