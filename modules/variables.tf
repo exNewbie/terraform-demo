@@ -63,6 +63,7 @@ variable "asg_max_size" {
 
 variable "lifecycle_hook_terminating_enabled" {
   type        = bool
+  default     = false
   description = "Whether Lifecycle hook Terminating is enabled"
 }
 
@@ -70,6 +71,11 @@ variable "lifecycle_hook_terminating_timeout" {
   type        = number
   default     = 900
   description = "Lifecycle hook Terminating timeout"
+}
+
+variable "lifecycle_hook_launching_enabled" {
+  type        = bool
+  description = "Whether Lifecycle hook Terminating is enabled"
 }
 
 variable "lifecycle_hook_launching_timeout" {
