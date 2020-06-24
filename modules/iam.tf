@@ -20,7 +20,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "ec2_instance_Lifecycle" {
-  name = "ec2-instance-CloudWatchLogs"
+  name = "ASG-Lifecycle-Hook"
   role = aws_iam_role.ec2_instance.id
 
   policy = <<EOF
