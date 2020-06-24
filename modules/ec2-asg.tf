@@ -1,12 +1,12 @@
 resource "aws_launch_configuration" "launch_configuration" {
-  ## Error: Cycle: module.demo.aws_launch_configuration.launch_configuration (destroy deposed 90e4c544), module.demo.aws_autoscaling_group.autoscaling_group
-  name_prefix = "launch-conf-application-"
+  name_prefix = "launch-conf-app-"
 
-  image_id        = data.aws_ami.ami.id
-  instance_type   = var.instance_type
-  security_groups = [aws_security_group.sg_lb.id]
-  key_name        = var.ec2_key_pair
-  user_data       = data.template_file.start_deploy.rendered
+  image_id             = data.aws_ami.ami.id
+  instance_type        = var.instance_type
+  security_groups      = [aws_security_group.sg_lb.id]
+  key_name             = var.ec2_key_pair
+  user_data            = data.template_file.start_deploy.rendered
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   lifecycle {
     create_before_destroy = true
@@ -43,5 +43,25 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_autoscaling_lifecycle_hook" "lifecycle_hook_terminating" {
+  count = var.lifecycle_hook_terminating_enabled ? 1 : 0
+
+  name                   = "Terminating"
+  autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
+  default_result         = "CONTINUE"
+  heartbeat_timeout      = var.lifecycle_hook_terminating_timeout
+  lifecycle_transition   = "autoscaling:EC2_INSTANCE_TERMINATING"
+}
+
+resource "aws_autoscaling_lifecycle_hook" "lifecycle_hook_launching" {
+  count = var.lifecycle_hook_launching_enabled ? 1 : 0
+
+  name                   = "Launching"
+  autoscaling_group_name = aws_autoscaling_group.autoscaling_group.name
+  default_result         = "CONTINUE"
+  heartbeat_timeout      = var.lifecycle_hook_launching_timeout
+  lifecycle_transition   = "autoscaling:EC2_INSTANCE_LAUNCHING"
 }
 

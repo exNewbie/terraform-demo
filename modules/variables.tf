@@ -7,13 +7,13 @@ locals {
   asg_tags = [
     {
       key                 = "Name"
-      value               = "application"
+      value               = "demo"
       propagate_at_launch = true
     },
   ]
 
-  lb_name    = "lb-application"
-  lb_tg_name = "app"
+  lb_name    = "lb-demo"
+  lb_tg_name = "demo"
 
   lb_tags = {
     Name = local.lb_name
@@ -61,6 +61,23 @@ variable "asg_max_size" {
   description = "Maximum number of instances allowed in the auto-scaling group."
 }
 
+variable "lifecycle_hook_terminating_enabled" {
+  type        = bool
+  description = "Whether Lifecycle hook Terminating is enabled"
+}
+
+variable "lifecycle_hook_terminating_timeout" {
+  type        = number
+  default     = 900
+  description = "Lifecycle hook Terminating timeout"
+}
+
+variable "lifecycle_hook_launching_timeout" {
+  type        = number
+  default     = 900
+  description = "Whether Lifecycle hook Launching timeout"
+}
+
 # ------------------------------------------------------------------------------
 # Load Balancer variables
 # ------------------------------------------------------------------------------
@@ -101,5 +118,9 @@ data "aws_ami" "ami" {
 
 data "template_file" "start_deploy" {
   template = file("${path.module}/scripts/start-deploy.tpl")
-}
 
+  vars = {
+    asg_name                      = "asg-demo"
+    lifecycle_hook_launching_name = "demo-lifecycle-hook-launching"
+  }
+}
