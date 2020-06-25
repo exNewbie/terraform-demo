@@ -31,7 +31,12 @@ write_log "INFO" "$0 Start web server";
 systemctl restart nginx;
 
 ### Continue Lifecycle hook
-write_log "INFO" "$0 Send CONTINUE to Lifecycle hook...";
-$AWS_CLI autoscaling complete-lifecycle-action --lifecycle-hook-name ${lifecycle_hook_launching_name} --auto-scaling-group-name ${asg_name} --lifecycle-action-result CONTINUE --instance-id $INSTANCE_ID;
+if [ $? -ne 0 ]; then
+  write_log "INFO" "$0 Send ABANDON to Lifecycle hook...";
+  $AWS_CLI autoscaling complete-lifecycle-action --lifecycle-hook-name ${lifecycle_hook_launching_name} --auto-scaling-group-name ${asg_name} --lifecycle-action-result ABANDON --instance-id $INSTANCE_ID;
+else
+  write_log "INFO" "$0 Send CONTINUE to Lifecycle hook...";
+  $AWS_CLI autoscaling complete-lifecycle-action --lifecycle-hook-name ${lifecycle_hook_launching_name} --auto-scaling-group-name ${asg_name} --lifecycle-action-result CONTINUE --instance-id $INSTANCE_ID;
+fi
 
 write_log "INFO" "$0 finished...";

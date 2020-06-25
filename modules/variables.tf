@@ -127,6 +127,6 @@ data "template_file" "start_deploy" {
 
   vars = {
     asg_name                      = "asg-demo"
-    lifecycle_hook_launching_name = "demo-lifecycle-hook-launching"
+    lifecycle_hook_launching_name = "Launching"
   }
 }
